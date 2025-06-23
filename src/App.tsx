@@ -1,62 +1,25 @@
-import React, { useState } from "react";
 import Sidebar from "./components/Sidebar";
 import GridCanvas from "./components/GridCanvas";
 import PropertiesPanel from "./components/PropertiesPanel";
 import PreviewPanel from "./components/PreviewPanel";
-import { ComponentData } from "./types";
+import { useEditorState } from "./hooks/useEditorState";
 
 function App() {
-  const [components, setComponents] = useState<ComponentData[]>([]);
-  const [selectedComponent, setSelectedComponent] =
-    useState<ComponentData | null>(null);
-  const [showPreview, setShowPreview] = useState(false);
-  const [showProperties, setShowProperties] = useState(false);
-  const [gridCols, setGridCols] = useState(12);
-  const [cellWidth, setCellWidth] = useState(80);
-
-  const handleUpdateComponents = (newComponents: ComponentData[]) => {
-    setComponents(newComponents);
-  };
-
-  const handleSelectComponent = (component: ComponentData | null) => {
-    setSelectedComponent(component);
-    setShowProperties(!!component);
-  };
-
-  const handleUpdateComponent = (updatedComponent: ComponentData) => {
-    setComponents(
-      components.map((comp) =>
-        comp.id === updatedComponent.id
-          ? {
-              ...comp,
-              ...updatedComponent,
-              gridSpan: updatedComponent.gridSpan ?? comp.gridSpan,
-              gridRowSpan: updatedComponent.gridRowSpan ?? comp.gridRowSpan,
-              style: { ...comp.style, ...updatedComponent.style },
-            }
-          : comp
-      )
-    );
-    setSelectedComponent((prev) =>
-      prev && prev.id === updatedComponent.id
-        ? {
-            ...prev,
-            ...updatedComponent,
-            gridSpan: updatedComponent.gridSpan ?? prev.gridSpan,
-            gridRowSpan: updatedComponent.gridRowSpan ?? prev.gridRowSpan,
-            style: { ...prev.style, ...updatedComponent.style },
-          }
-        : prev
-    );
-  };
-
-  const handleGridCols = (delta: number) => {
-    setGridCols((c) => Math.max(4, Math.min(24, c + delta)));
-  };
-
-  const handleCellWidth = (delta: number) => {
-    setCellWidth((w) => Math.max(40, Math.min(200, w + delta)));
-  };
+  const {
+    components,
+    selectedComponent,
+    showPreview,
+    showProperties,
+    gridCols,
+    cellWidth,
+    handleUpdateComponents,
+    handleSelectComponent,
+    handleUpdateComponent,
+    handleGridCols,
+    handleCellWidth,
+    setShowPreview,
+    setShowProperties,
+  } = useEditorState();
 
   return (
     <div className="h-screen w-screen overflow-x-hidden flex bg-gray-100">
@@ -76,17 +39,6 @@ function App() {
             </div>
           </div>
           <div className="flex items-center space-x-3">
-            {/* <button
-              onClick={() => setShowProperties(!showProperties)}
-              className={`flex items-center px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                showProperties
-                  ? "bg-blue-100 text-blue-700 shadow-sm"
-                  : "text-gray-600 hover:bg-gray-100 hover:shadow-sm"
-              }`}
-            >
-              <Settings className="w-4 h-4 mr-2" />
-              Properties
-            </button> */}
             <button
               onClick={() => setShowPreview(true)}
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-all duration-200 hover:shadow-lg transform hover:scale-105"
