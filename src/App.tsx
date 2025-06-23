@@ -26,10 +26,28 @@ function App() {
   const handleUpdateComponent = (updatedComponent: ComponentData) => {
     setComponents(
       components.map((comp) =>
-        comp.id === updatedComponent.id ? updatedComponent : comp
+        comp.id === updatedComponent.id
+          ? {
+              ...comp,
+              ...updatedComponent,
+              gridSpan: updatedComponent.gridSpan ?? comp.gridSpan,
+              gridRowSpan: updatedComponent.gridRowSpan ?? comp.gridRowSpan,
+              style: { ...comp.style, ...updatedComponent.style },
+            }
+          : comp
       )
     );
-    setSelectedComponent(updatedComponent);
+    setSelectedComponent((prev) =>
+      prev && prev.id === updatedComponent.id
+        ? {
+            ...prev,
+            ...updatedComponent,
+            gridSpan: updatedComponent.gridSpan ?? prev.gridSpan,
+            gridRowSpan: updatedComponent.gridRowSpan ?? prev.gridRowSpan,
+            style: { ...prev.style, ...updatedComponent.style },
+          }
+        : prev
+    );
   };
 
   const handleGridCols = (delta: number) => {
@@ -146,7 +164,9 @@ function App() {
           >
             {showProperties && (
               <PropertiesPanel
-                selectedComponent={selectedComponent}
+                selectedComponent={
+                  components.find((c) => c.id === selectedComponent?.id) || null
+                }
                 onUpdateComponent={handleUpdateComponent}
                 onClose={() => setShowProperties(false)}
               />
