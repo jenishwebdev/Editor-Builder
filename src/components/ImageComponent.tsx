@@ -1,13 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { AlertCircle, ExternalLink } from 'lucide-react';
-import { ComponentData } from '../types';
-
-interface ImageComponentProps {
-  component: ComponentData;
-  onUpdate: (component: ComponentData) => void;
-  isEditing: boolean;
-  isPreviewMode: boolean;
-}
+import React, { useState, useEffect } from "react";
+import { AlertCircle, ExternalLink } from "lucide-react";
+import { ImageComponentProps } from "../types/component";
+import Input from "./common/Input";
 
 const ImageComponent: React.FC<ImageComponentProps> = ({
   component,
@@ -18,12 +12,6 @@ const ImageComponent: React.FC<ImageComponentProps> = ({
   const [localContent, setLocalContent] = useState(component.content);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-
-  useEffect(() => {
-    setLocalContent(component.content);
-    setImageLoaded(false);
-    setImageError(false);
-  }, [component.content]);
 
   const handleContentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newContent = e.target.value;
@@ -52,6 +40,12 @@ const ImageComponent: React.FC<ImageComponentProps> = ({
     }
   };
 
+  useEffect(() => {
+    setLocalContent(component.content);
+    setImageLoaded(false);
+    setImageError(false);
+  }, [component.content]);
+
   if (isEditing && !isPreviewMode) {
     return (
       <div className="p-4 h-full">
@@ -59,11 +53,10 @@ const ImageComponent: React.FC<ImageComponentProps> = ({
           <label className="block text-xs font-medium text-gray-700 mb-1">
             Image URL
           </label>
-          <input
+          <Input
             type="url"
             value={localContent}
             onChange={handleContentChange}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
             placeholder="https://example.com/image.jpg"
             autoFocus
           />
@@ -75,14 +68,16 @@ const ImageComponent: React.FC<ImageComponentProps> = ({
         {/* Preview */}
         {localContent && isValidUrl(localContent) && (
           <div className="mt-4">
-            <div className="text-xs font-medium text-gray-700 mb-2">Preview:</div>
+            <div className="text-xs font-medium text-gray-700 mb-2">
+              Preview:
+            </div>
             <div className="border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
               {!imageLoaded && !imageError && (
                 <div className="h-32 flex items-center justify-center">
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
                 </div>
               )}
-              
+
               {imageError && (
                 <div className="h-32 flex items-center justify-center text-red-500">
                   <AlertCircle className="w-6 h-6 mr-2" />
@@ -93,7 +88,9 @@ const ImageComponent: React.FC<ImageComponentProps> = ({
               <img
                 src={localContent}
                 alt="Preview"
-                className={`w-full h-32 object-cover ${imageLoaded ? 'block' : 'hidden'}`}
+                className={`w-full h-32 object-cover ${
+                  imageLoaded ? "block" : "hidden"
+                }`}
                 onLoad={handleImageLoad}
                 onError={handleImageError}
               />
@@ -103,16 +100,20 @@ const ImageComponent: React.FC<ImageComponentProps> = ({
 
         {/* Suggested URLs */}
         <div className="mt-4">
-          <div className="text-xs font-medium text-gray-700 mb-2">Sample Images:</div>
+          <div className="text-xs font-medium text-gray-700 mb-2">
+            Sample Images:
+          </div>
           <div className="space-y-1">
             {[
-              'https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg',
-              'https://images.pexels.com/photos/1181673/pexels-photo-1181673.jpeg',
-              'https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg'
+              "https://images.pexels.com/photos/1323550/pexels-photo-1323550.jpeg",
+              "https://images.pexels.com/photos/1181673/pexels-photo-1181673.jpeg",
+              "https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg",
             ].map((url, index) => (
               <button
                 key={index}
-                onClick={() => handleContentChange({ target: { value: url } } as any)}
+                onClick={() =>
+                  handleContentChange({ target: { value: url } } as any)
+                }
                 className="text-xs text-blue-600 hover:text-blue-800 underline block truncate w-full text-left"
               >
                 Sample {index + 1}
@@ -126,7 +127,11 @@ const ImageComponent: React.FC<ImageComponentProps> = ({
 
   if (!component.content || !isValidUrl(component.content)) {
     return (
-      <div className={`${isPreviewMode ? 'p-0' : 'p-4'} h-full min-h-[200px] flex items-center justify-center bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg`}>
+      <div
+        className={`${
+          isPreviewMode ? "p-0" : "p-4"
+        } h-full min-h-[200px] flex items-center justify-center bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg`}
+      >
         <div className="text-center text-gray-500">
           <AlertCircle className="w-8 h-8 mx-auto mb-2" />
           <div className="text-sm font-medium">No Image URL</div>
@@ -137,14 +142,14 @@ const ImageComponent: React.FC<ImageComponentProps> = ({
   }
 
   return (
-    <div className={`${isPreviewMode ? '' : 'p-4'} h-full`}>
+    <div className={`${isPreviewMode ? "" : "p-4"} h-full`}>
       <div className="relative h-full min-h-[200px] overflow-hidden rounded-lg bg-gray-50">
         {!imageLoaded && !imageError && (
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           </div>
         )}
-        
+
         {imageError && (
           <div className="absolute inset-0 flex items-center justify-center text-red-500 bg-red-50">
             <div className="text-center">
@@ -159,7 +164,7 @@ const ImageComponent: React.FC<ImageComponentProps> = ({
           src={component.content}
           alt="User content"
           className={`w-full h-full object-cover transition-opacity duration-200 ${
-            imageLoaded ? 'opacity-100' : 'opacity-0'
+            imageLoaded ? "opacity-100" : "opacity-0"
           }`}
           onLoad={handleImageLoad}
           onError={handleImageError}

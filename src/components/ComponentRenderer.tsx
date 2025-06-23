@@ -1,11 +1,6 @@
 import React from "react";
-import { ComponentData } from "../types";
+import { ComponentRendererProps } from "../types/component";
 import { parseMarkdown } from "../utils/markdown";
-
-interface ComponentRendererProps {
-  component: ComponentData;
-  isPreview?: boolean;
-}
 
 const ComponentRenderer: React.FC<ComponentRendererProps> = ({
   component,

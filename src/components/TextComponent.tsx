@@ -1,31 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { ComponentData } from '../types';
-import { parseMarkdown } from '../utils/markdown';
+import React, { useState, useEffect } from "react";
+import { ComponentData } from "../types";
+import { parseMarkdown } from "../utils/markdown";
+import Textarea from "./common/Textarea";
 
-interface TextComponentProps {
+const TextComponent: React.FC<{
   component: ComponentData;
   onUpdate: (component: ComponentData) => void;
   isEditing: boolean;
   isPreviewMode: boolean;
-}
-
-const TextComponent: React.FC<TextComponentProps> = ({
-  component,
-  onUpdate,
-  isEditing,
-  isPreviewMode,
-}) => {
+}> = ({ component, onUpdate, isEditing, isPreviewMode }) => {
   const [localContent, setLocalContent] = useState(component.content);
-
-  useEffect(() => {
-    setLocalContent(component.content);
-  }, [component.content]);
 
   const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newContent = e.target.value;
     setLocalContent(newContent);
     onUpdate({ ...component, content: newContent });
   };
+
+  useEffect(() => {
+    setLocalContent(component.content);
+  }, [component.content]);
 
   if (isEditing && !isPreviewMode) {
     return (
@@ -34,7 +28,7 @@ const TextComponent: React.FC<TextComponentProps> = ({
           <label className="block text-xs font-medium text-gray-700 mb-1">
             Content (Markdown supported)
           </label>
-          <textarea
+          <Textarea
             value={localContent}
             onChange={handleContentChange}
             className="w-full h-48 p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm font-mono"
@@ -57,11 +51,11 @@ Write your **markdown** content here. You can use:
   }
 
   return (
-    <div className={`${isPreviewMode ? 'p-0' : 'p-4'} h-full overflow-auto`}>
-      <div 
+    <div className={`${isPreviewMode ? "p-0" : "p-4"} h-full overflow-auto`}>
+      <div
         className="prose prose-sm max-w-none text-gray-900"
-        dangerouslySetInnerHTML={{ 
-          __html: parseMarkdown(component.content) 
+        dangerouslySetInnerHTML={{
+          __html: parseMarkdown(component.content),
         }}
       />
     </div>

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Eye, Settings } from "lucide-react";
 import Sidebar from "./components/Sidebar";
 import GridCanvas from "./components/GridCanvas";
 import PropertiesPanel from "./components/PropertiesPanel";
@@ -74,7 +73,6 @@ function App() {
               onClick={() => setShowPreview(true)}
               className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-all duration-200 hover:shadow-lg transform hover:scale-105"
             >
-              <Eye className="w-4 h-4 mr-2" />
               Preview
             </button>
           </div>

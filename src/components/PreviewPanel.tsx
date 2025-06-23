@@ -1,13 +1,8 @@
 import React from "react";
 import { Monitor, Smartphone, X } from "lucide-react";
+import { PreviewPanelProps } from "../types/component";
 import { ComponentData, PreviewMode } from "../types";
 import ComponentRenderer from "./ComponentRenderer";
-
-interface PreviewPanelProps {
-  components: ComponentData[];
-  onClose: () => void;
-  gap?: number;
-}
 
 const PreviewPanel: React.FC<PreviewPanelProps> = ({
   components,

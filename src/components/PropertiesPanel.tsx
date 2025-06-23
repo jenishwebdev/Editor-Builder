@@ -1,12 +1,10 @@
 import React from "react";
-import { Settings, Type, Palette, Layout, X } from "lucide-react";
-import { ComponentData } from "../types";
-
-interface PropertiesPanelProps {
-  selectedComponent: ComponentData | null;
-  onUpdateComponent: (component: ComponentData) => void;
-  onClose: () => void;
-}
+import { Settings, Type, Palette, X } from "lucide-react";
+import { PropertiesPanelProps } from "../types/component";
+import Input from "./common/Input";
+import Textarea from "./common/Textarea";
+import Select from "./common/Select";
+import Label from "./common/Label";
 
 const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   selectedComponent,
@@ -18,6 +16,8 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   const handleStyleChange = (property: string, value: any) => {
     onUpdateComponent({
       ...selectedComponent,
+      gridSpan: selectedComponent.gridSpan,
+      gridRowSpan: selectedComponent.gridRowSpan,
       style: {
         ...selectedComponent.style,
         [property]: value,
@@ -28,14 +28,9 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
   const handleContentChange = (content: string) => {
     onUpdateComponent({
       ...selectedComponent,
+      gridSpan: selectedComponent.gridSpan,
+      gridRowSpan: selectedComponent.gridRowSpan,
       content,
-    });
-  };
-
-  const handleGridChange = (property: string, value: number) => {
-    onUpdateComponent({
-      ...selectedComponent,
-      [property]: Math.max(1, value),
     });
   };
 
@@ -79,14 +74,14 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             Content
           </h3>
           {selectedComponent.type === "text" ? (
-            <textarea
+            <Textarea
               value={selectedComponent.content}
               onChange={(e) => handleContentChange(e.target.value)}
               className="w-full h-32 p-3 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all duration-200"
               placeholder="Enter your text content..."
             />
           ) : (
-            <input
+            <Input
               type="url"
               value={selectedComponent.content}
               onChange={(e) => handleContentChange(e.target.value)}
@@ -105,15 +100,12 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
             </h3>
             <div className="space-y-3">
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Font Size
-                </label>
-                <select
+                <Label>Font Size</Label>
+                <Select
                   value={selectedComponent.style.fontSize}
                   onChange={(e) =>
                     handleStyleChange("fontSize", e.target.value)
                   }
-                  className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all duration-200"
                 >
                   <option value="text-xs">Extra Small</option>
                   <option value="text-sm">Small</option>
@@ -122,41 +114,35 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                   <option value="text-xl">Extra Large</option>
                   <option value="text-2xl">2X Large</option>
                   <option value="text-3xl">3X Large</option>
-                </select>
+                </Select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Font Weight
-                </label>
-                <select
+                <Label>Font Weight</Label>
+                <Select
                   value={selectedComponent.style.fontWeight}
                   onChange={(e) =>
                     handleStyleChange("fontWeight", e.target.value)
                   }
-                  className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all duration-200"
                 >
                   <option value="font-light">Light</option>
                   <option value="font-normal">Normal</option>
                   <option value="font-medium">Medium</option>
                   <option value="font-semibold">Semibold</option>
                   <option value="font-bold">Bold</option>
-                </select>
+                </Select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Text Align
-                </label>
-                <select
+                <Label>Text Align</Label>
+                <Select
                   value={selectedComponent.style.textAlign}
                   onChange={(e) =>
                     handleStyleChange("textAlign", e.target.value)
                   }
-                  className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all duration-200"
                 >
                   <option value="left">Left</option>
                   <option value="center">Center</option>
                   <option value="right">Right</option>
-                </select>
+                </Select>
               </div>
             </div>
           </div>
@@ -170,9 +156,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
           </h3>
           <div className="space-y-3">
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                Text Color
-              </label>
+              <Label>Text Color</Label>
               <div className="flex items-center space-x-2">
                 <input
                   type="color"
@@ -180,18 +164,15 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                   onChange={(e) => handleStyleChange("color", e.target.value)}
                   className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                 />
-                <input
+                <Input
                   type="text"
                   value={selectedComponent.style.color}
                   onChange={(e) => handleStyleChange("color", e.target.value)}
-                  className="flex-1 p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                Background Color
-              </label>
+              <Label>Background Color</Label>
               <div className="flex items-center space-x-2">
                 <input
                   type="color"
@@ -201,13 +182,12 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                   }
                   className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                 />
-                <input
+                <Input
                   type="text"
                   value={selectedComponent.style.backgroundColor}
                   onChange={(e) =>
                     handleStyleChange("backgroundColor", e.target.value)
                   }
-                  className="flex-1 p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 />
               </div>
             </div>
@@ -219,44 +199,36 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
           <h3 className="font-medium text-gray-900 mb-3">Spacing</h3>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                Padding
-              </label>
-              <select
+              <Label>Padding</Label>
+              <Select
                 value={selectedComponent.style.padding}
                 onChange={(e) => handleStyleChange("padding", e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all duration-200"
               >
                 <option value="p-0">None</option>
                 <option value="p-2">Small</option>
                 <option value="p-4">Medium</option>
                 <option value="p-6">Large</option>
                 <option value="p-8">Extra Large</option>
-              </select>
+              </Select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                Margin
-              </label>
-              <select
+              <Label>Margin</Label>
+              <Select
                 value={selectedComponent.style.margin}
                 onChange={(e) => handleStyleChange("margin", e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all duration-200"
               >
                 <option value="m-0">None</option>
                 <option value="m-2">Small</option>
                 <option value="m-4">Medium</option>
                 <option value="m-6">Large</option>
                 <option value="m-8">Extra Large</option>
-              </select>
+              </Select>
             </div>
           </div>
           {/* Preview Gap */}
           <div className="mt-4">
-            <label className="block text-xs font-medium text-gray-700 mb-1">
-              Preview Gap (space between components)
-            </label>
-            <select
+            <Label>Preview Gap (space between components)</Label>
+            <Select
               value={selectedComponent.gap || 0}
               onChange={(e) =>
                 onUpdateComponent({
@@ -264,14 +236,13 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                   gap: Number(e.target.value),
                 })
               }
-              className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all duration-200"
             >
               <option value={0}>None</option>
               <option value={2}>Small</option>
               <option value={4}>Medium</option>
               <option value={6}>Large</option>
               <option value={8}>Extra Large</option>
-            </select>
+            </Select>
           </div>
         </div>
 
@@ -281,44 +252,36 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
           <div className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Width
-                </label>
-                <select
+                <Label>Width</Label>
+                <Select
                   value={selectedComponent.style.borderWidth}
                   onChange={(e) =>
                     handleStyleChange("borderWidth", e.target.value)
                   }
-                  className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all duration-200"
                 >
                   <option value="border-0">None</option>
                   <option value="border">1px</option>
                   <option value="border-2">2px</option>
                   <option value="border-4">4px</option>
-                </select>
+                </Select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Style
-                </label>
-                <select
+                <Label>Style</Label>
+                <Select
                   value={selectedComponent.style.borderStyle}
                   onChange={(e) =>
                     handleStyleChange("borderStyle", e.target.value)
                   }
-                  className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all duration-200"
                 >
                   <option value="solid">Solid</option>
                   <option value="dashed">Dashed</option>
                   <option value="dotted">Dotted</option>
                   <option value="none">None</option>
-                </select>
+                </Select>
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                Border Color
-              </label>
+              <Label>Border Color</Label>
               <div className="flex items-center space-x-2">
                 <input
                   type="color"
@@ -328,26 +291,22 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                   }
                   className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                 />
-                <input
+                <Input
                   type="text"
                   value={selectedComponent.style.borderColor}
                   onChange={(e) =>
                     handleStyleChange("borderColor", e.target.value)
                   }
-                  className="flex-1 p-2 border border-gray-300 rounded text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                Border Radius
-              </label>
-              <select
+              <Label>Border Radius</Label>
+              <Select
                 value={selectedComponent.style.borderRadius}
                 onChange={(e) =>
                   handleStyleChange("borderRadius", e.target.value)
                 }
-                className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all duration-200"
               >
                 <option value="rounded-none">None</option>
                 <option value="rounded-sm">Small</option>
@@ -355,7 +314,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
                 <option value="rounded-lg">Large</option>
                 <option value="rounded-xl">Extra Large</option>
                 <option value="rounded-full">Full</option>
-              </select>
+              </Select>
             </div>
           </div>
         </div>
@@ -365,9 +324,7 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
           <h3 className="font-medium text-gray-900 mb-3">Effects</h3>
           <div className="space-y-3">
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                Opacity
-              </label>
+              <Label>Opacity</Label>
               <input
                 type="range"
                 min="0"
@@ -384,20 +341,17 @@ const PropertiesPanel: React.FC<PropertiesPanelProps> = ({
               </div>
             </div>
             <div>
-              <label className="block text-xs font-medium text-gray-700 mb-1">
-                Shadow
-              </label>
-              <select
+              <Label>Shadow</Label>
+              <Select
                 value={selectedComponent.style.boxShadow}
                 onChange={(e) => handleStyleChange("boxShadow", e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all duration-200"
               >
                 <option value="shadow-none">None</option>
                 <option value="shadow-sm">Small</option>
                 <option value="shadow">Medium</option>
                 <option value="shadow-lg">Large</option>
                 <option value="shadow-xl">Extra Large</option>
-              </select>
+              </Select>
             </div>
           </div>
         </div>

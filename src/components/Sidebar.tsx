@@ -1,10 +1,7 @@
 import React from "react";
 import { Type, Image, Layers } from "lucide-react";
 import { DragData } from "../types";
-
-interface SidebarProps {
-  className?: string;
-}
+import { SidebarProps } from "../types/component";
 
 const Sidebar: React.FC<SidebarProps> = ({ className = "" }) => {
   const handleDragStart = (e: React.DragEvent, type: "text" | "image") => {

@@ -1,16 +1,8 @@
 import React, { useState, useCallback, useRef } from "react";
 import { Plus } from "lucide-react";
+import { GridCanvasProps } from "../types/component";
 import { ComponentData, DragData } from "../types";
 import DraggableComponent from "./DraggableComponent";
-
-interface GridCanvasProps {
-  components: ComponentData[];
-  onUpdateComponents: (components: ComponentData[]) => void;
-  selectedComponent: ComponentData | null;
-  onSelectComponent: (component: ComponentData | null) => void;
-  gridCols?: number;
-  cellWidth?: number;
-}
 
 const GridCanvas: React.FC<GridCanvasProps> = ({
   components,
